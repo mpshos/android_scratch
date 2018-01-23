@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">ConcertFinder</string>
+
+    <string name="btn_text_add">Add</string>
+
+    <string name="band_search_hint">Search for a band you like</string>
+
+    <string name="no_results">What kinda obscure BS you looking for?</string>
+    <string name="nothing_save">There\'s nothing here</string>
+
+    <string name="eventful_api_key">TpFJnpt4D3CF4qGm</string>
+    <string name="eventful_base_url">http://api.eventful.com/json/performers/search?app_key=</string>
 </resources>

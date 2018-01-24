@@ -1,6 +1,5 @@
 package com.shostrand.mike.concertfinder.utils;
 
-import com.shostrand.mike.concertfinder.data.BandContract.BandSearchResult;
 
 /**
  * Created by Mike on 1/15/2018.

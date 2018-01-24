@@ -5,10 +5,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.shostrand.mike.concertfinder.data.BandResult;
 import com.shostrand.mike.concertfinder.utils.FakeDataUtils;
+import com.shostrand.mike.concertfinder.utils.JsonUtils;
+import com.shostrand.mike.concertfinder.utils.NetworkUtils;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
 
 public class AddBandActivity extends AppCompatActivity {
 
@@ -54,17 +62,33 @@ public class AddBandActivity extends AppCompatActivity {
         }
     }
 
-    public class BandSearchTask extends AsyncTask<String, Void, String[][]> {
+    public class BandSearchTask extends AsyncTask<String, Void, ArrayList<BandResult>>{
         @Override
-        protected String[][] doInBackground(String... strings) {
-            return FakeDataUtils.getFakeData();
+        protected ArrayList<BandResult> doInBackground(String... strings) {
+            URL searchUrl = NetworkUtils.getUrl(mSearchEditText.getText().toString());
+
+            if(searchUrl != null){
+                try{
+                    String jsonResult = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+                    Log.v(AddBandActivity.class.getSimpleName(), jsonResult);
+
+                    //parse result
+                    ArrayList<BandResult> results = JsonUtils.parseEventfulResponse(jsonResult);
+                    return results;
+
+                } catch( Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            return null;
         }
 
         @Override
-        protected void onPostExecute(String[][] strings) {
-            super.onPostExecute(strings);
-            mAdapter.swapData(strings);
-            displayResults(strings != null);
+        protected void onPostExecute(ArrayList<BandResult> result) {
+            super.onPostExecute(result);
+            mAdapter.swapData(result);
+            displayResults(result != null);
         }
     }
 }

@@ -7,6 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.shostrand.mike.concertfinder.data.BandResult;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,7 +18,7 @@ import java.util.List;
 
 public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultViewHolder> {
     private Context mContext;
-    private String[][] mData;
+    private ArrayList<BandResult> mData;
 
     public ResultsAdapter(Context context){
         mContext = context;
@@ -32,12 +35,12 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultVi
 
     @Override
     public void onBindViewHolder(ResultViewHolder holder, int position) {
-        if(mData == null || position >= mData.length || mData[ position ].length < 2){
+        if(mData == null || position >= mData.size()){
             return;
         }
 
-        holder.nameTextView.setText(mData[position][0]);
-        holder.genreTextView.setText(mData[position][1]);
+        holder.nameTextView.setText(mData.get(position).getName());
+        holder.genreTextView.setText(mData.get(position).getGenre());
     }
 
 
@@ -47,11 +50,11 @@ public class ResultsAdapter extends RecyclerView.Adapter<ResultsAdapter.ResultVi
             return 0;
         }
         else{
-            return mData.length;
+            return mData.size();
         }
     }
 
-    public void swapData(String[][] data){
+    public void swapData(ArrayList<BandResult> data){
         mData = data;
         this.notifyDataSetChanged();
     }

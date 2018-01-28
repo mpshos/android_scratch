@@ -19,6 +19,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddBandActivity"></activity>
+
+        <provider
+            android:authorities="com.shostrand.mike.concertfinder"
+            android:name="com.shostrand.mike.concertfinder.data.BandProvider"
+            android:exported="false" />
+
     </application>
 
 </manifest>

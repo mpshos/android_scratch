@@ -1,5 +1,6 @@
 package com.shostrand.mike.concertfinder;
 
+import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,19 +10,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.shostrand.mike.concertfinder.data.BandContract;
 import com.shostrand.mike.concertfinder.data.BandResult;
-import com.shostrand.mike.concertfinder.utils.FakeDataUtils;
 import com.shostrand.mike.concertfinder.utils.JsonUtils;
 import com.shostrand.mike.concertfinder.utils.NetworkUtils;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class AddBandActivity extends AppCompatActivity {
+public class AddBandActivity extends AppCompatActivity implements BandAdapter.BandAdapterOnClickHandler {
 
     private EditText mSearchEditText;
-    private ResultsAdapter mAdapter;
+    private BandAdapter mAdapter;
     private RecyclerView mResRecyclerView;
 
     @Override
@@ -35,7 +35,7 @@ public class AddBandActivity extends AppCompatActivity {
         //set up RecyclerView
         mResRecyclerView = (RecyclerView) findViewById(R.id.rv_band_results);
         mResRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ResultsAdapter(this);
+        mAdapter = new BandAdapter(this, this);
         mResRecyclerView.setAdapter(mAdapter);
 
     }
@@ -60,6 +60,16 @@ public class AddBandActivity extends AppCompatActivity {
         else{
             mResRecyclerView.setVisibility(View.INVISIBLE);
         }
+    }
+
+    @Override
+    public void onClick(String name, String genre) {
+        //Add insert parameters to new ContentValues object
+        ContentValues values = new ContentValues();
+        values.put(BandContract.BandEntry.COLUMN_BAND_NAME, name);
+        values.put(BandContract.BandEntry.COLUMN_GENRE, genre);
+
+        getContentResolver().insert(BandContract.BandEntry.CONTENT_URI, values);
     }
 
     public class BandSearchTask extends AsyncTask<String, Void, ArrayList<BandResult>>{

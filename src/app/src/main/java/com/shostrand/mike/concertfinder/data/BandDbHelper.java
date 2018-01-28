@@ -23,7 +23,7 @@ public class BandDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //Create band table
         final String SQL_CREATE_BAND_TABL = "CREATE TABLE " + BandEntry.TABLE_NAME + "( " +
-                BandEntry._ID + " INTEGER NON NULL AUTOINCREMENT, " +
+                BandEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 BandEntry.COLUMN_BAND_NAME + " TEXT NOT NULL, " +
                 BandEntry.COLUMN_GENRE + " TEXT NOT NULL, " +
                 BandEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +

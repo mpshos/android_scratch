@@ -39,8 +39,26 @@ public class BandProvider extends ContentProvider {
 
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int numRowsDeleted = 0;
+
+        switch(sUriMatcher.match(uri)){
+
+            case CODE_BAND_W_ID:
+                String id = uri.getLastPathSegment();
+
+                numRowsDeleted = mOpenDbHelper.getWritableDatabase().delete(
+                        BandContract.BandEntry.TABLE_NAME,
+                        BandContract.BandEntry._ID + "=?" + id,
+                        null
+                );
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Delete doesn't support this uri: " + uri.toString());
+        }
+
+        return numRowsDeleted;
     }
 
     @Nullable

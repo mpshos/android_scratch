@@ -49,6 +49,7 @@ public class BandAdapter extends RecyclerView.Adapter<BandAdapter.ResultViewHold
 
             holder.nameTextView.setText(mDataCursor.getString(MainActivity.BAND_NAME_IDX));
             holder.genreTextView.setText(mDataCursor.getString(MainActivity.BAND_GENRE_IDX));
+            holder.itemView.setTag(mDataCursor.getInt(MainActivity.BAND_ID_IDX));
         }
         else {
             holder.nameTextView.setText(mDataList.get(position).getName());

@@ -78,7 +78,7 @@ public class BandAdapter extends RecyclerView.Adapter<BandAdapter.ResultViewHold
         this.notifyDataSetChanged();
     }
 
-    public void swapData(Cursor cursor) {
+    public void swapCursor(Cursor cursor) {
         mDataCursor = cursor;
         mDataList = null;
         mUseCursor = true;

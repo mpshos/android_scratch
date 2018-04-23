@@ -70,6 +70,8 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
         values.put(BandContract.BandEntry.COLUMN_GENRE, genre);
 
         getContentResolver().insert(BandContract.BandEntry.CONTENT_URI, values);
+
+        onBackPressed();
     }
 
     public class BandSearchTask extends AsyncTask<String, Void, ArrayList<BandResult>>{

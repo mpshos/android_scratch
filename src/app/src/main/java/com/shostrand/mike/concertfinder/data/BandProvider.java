@@ -49,9 +49,10 @@ public class BandProvider extends ContentProvider {
 
                 numRowsDeleted = mOpenDbHelper.getWritableDatabase().delete(
                         BandContract.BandEntry.TABLE_NAME,
-                        BandContract.BandEntry._ID + "=?" + id,
+                        BandContract.BandEntry._ID + "=" + id,
                         null
                 );
+                getContext().getContentResolver().notifyChange(BandContract.BandEntry.CONTENT_URI, null);
                 break;
 
             default:

@@ -1,8 +1,10 @@
 package com.shostrand.mike.concertfinder;
 
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private RecyclerView mBandRecyclerView;
     private BandAdapter mAdapter;
-    private Cursor mCursor;
+    private BandObserver mObserver;
 
     //band query projection
     public static final String[] BAND_PROJECTION = {
@@ -77,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         // Set up cursor loader
         getSupportLoaderManager().initLoader(LOADER_BAND_ID, null, this);
 
+        //Create band observer
+        mObserver = new BandObserver(new Handler());
+
+        //Attach observer to URI
+        getContentResolver().registerContentObserver(BandContract.BandEntry.CONTENT_URI, true, mObserver);
     }
 
     @Override
@@ -95,14 +102,37 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//        getSupportLoaderManager().restartLoader(LOADER_BAND_ID, null, this);
+//    }
+
     @Override
-    protected void onRestart() {
-        super.onRestart();
-        getSupportLoaderManager().restartLoader(LOADER_BAND_ID, null, this);
+    protected void onDestroy() {
+        getContentResolver().unregisterContentObserver(mObserver);
+        super.onDestroy();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    private class BandObserver extends ContentObserver {
+
+        public BandObserver(Handler handler){
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            this.onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            getSupportLoaderManager().restartLoader(LOADER_BAND_ID, null, MainActivity.this);
+        }
     }
 }

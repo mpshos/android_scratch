@@ -30,10 +30,10 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
         setContentView(R.layout.activity_add_band);
 
         //Get references to UI elements
-        mSearchEditText = (EditText) findViewById(R.id.et_search_text);
+        mSearchEditText = findViewById(R.id.et_search_text);
 
         //set up RecyclerView
-        mResRecyclerView = (RecyclerView) findViewById(R.id.rv_band_results);
+        mResRecyclerView = findViewById(R.id.rv_band_results);
         mResRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new BandAdapter(this, this);
         mResRecyclerView.setAdapter(mAdapter);
@@ -77,16 +77,21 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
     public class BandSearchTask extends AsyncTask<String, Void, ArrayList<BandResult>>{
         @Override
         protected ArrayList<BandResult> doInBackground(String... strings) {
-            URL searchUrl = NetworkUtils.getUrl(mSearchEditText.getText().toString());
+            // Validate keyword
+            if(strings.length == 0 || strings[0].isEmpty() ){
+                return null;
+            }
+
+            // Fetch results
+            URL searchUrl = NetworkUtils.getUrl(strings[0]);
 
             if(searchUrl != null){
                 try{
                     String jsonResult = NetworkUtils.getResponseFromHttpUrl(searchUrl);
                     Log.v(AddBandActivity.class.getSimpleName(), jsonResult);
 
-                    //parse result
-                    ArrayList<BandResult> results = JsonUtils.parseEventfulResponse(jsonResult);
-                    return results;
+                    // Parse result to BandResult
+                    return JsonUtils.parseEventfulResponse(jsonResult);
 
                 } catch( Exception e){
                     e.printStackTrace();

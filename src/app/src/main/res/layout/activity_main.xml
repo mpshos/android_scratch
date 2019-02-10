@@ -11,6 +11,15 @@
         android:layout_height="match_parent"
         android:paddingBottom="8dp"/>
 
+    <TextView
+        android:id="@+id/tv_no_bands"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        android:textAlignment="center"
+        android:visibility="gone"
+        android:text="@string/nothing_save"/>
+
     <!-- Floating action button that launches AddTaskActivity when clicked -->
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

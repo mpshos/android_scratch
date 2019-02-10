@@ -2,6 +2,7 @@
     <string name="app_name">ConcertFinder</string>
 
     <string name="btn_text_add">Add</string>
+    <string name="btn_text_search">Search</string>
 
     <string name="band_search_hint">Search for a band you like</string>
 

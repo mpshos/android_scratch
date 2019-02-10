@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.TextView;
 
 import com.shostrand.mike.concertfinder.data.BandContract;
 
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView mBandRecyclerView;
     private BandAdapter mAdapter;
     private BandObserver mObserver;
+    private TextView mNoResultsTextView;
 
     //band query projection
     public static final String[] BAND_PROJECTION = {
@@ -43,10 +45,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         //set up RecyclerView
-        mBandRecyclerView = (RecyclerView) findViewById(R.id.rv_bands);
+        mBandRecyclerView = findViewById(R.id.rv_bands);
         mBandRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new BandAdapter(this, null);
         mBandRecyclerView.setAdapter(mAdapter);
+
+        //Get reference to error text view
+        mNoResultsTextView = findViewById(R.id.tv_no_bands);
 
         //Create new ItemTouchHelper to handle swipe to delete
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         }).attachToRecyclerView(mBandRecyclerView);
 
         //set up floating action button onclick handler
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,6 +94,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mAdapter.swapCursor(data);
+
+        if(data.getCount() == 0){
+            mNoResultsTextView.setVisibility(View.VISIBLE);
+            mBandRecyclerView.setVisibility(View.GONE);
+        }
+        else{
+            mNoResultsTextView.setVisibility(View.GONE);
+            mBandRecyclerView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

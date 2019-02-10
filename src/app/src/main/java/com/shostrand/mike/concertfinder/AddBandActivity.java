@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.shostrand.mike.concertfinder.data.BandContract;
 import com.shostrand.mike.concertfinder.data.BandResult;
@@ -23,6 +25,8 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
     private EditText mSearchEditText;
     private BandAdapter mAdapter;
     private RecyclerView mResRecyclerView;
+    private TextView mNoResultsTextView;
+    private ProgressBar mLoadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
 
         //Get references to UI elements
         mSearchEditText = findViewById(R.id.et_search_text);
+        mNoResultsTextView = findViewById(R.id.tv_no_results);
+        mLoadingProgress = findViewById(R.id.pb_loading_indicator);
 
         //set up RecyclerView
         mResRecyclerView = findViewById(R.id.rv_band_results);
@@ -51,14 +57,25 @@ public class AddBandActivity extends AppCompatActivity implements BandAdapter.Ba
         BandSearchTask searchTask = new BandSearchTask();
         searchTask.execute(keyword);
 
+        // Display progress bar
+        mResRecyclerView.setVisibility(View.GONE);
+        mNoResultsTextView.setVisibility(View.GONE);
+        mLoadingProgress.setVisibility(View.VISIBLE);
+
     }
 
     public void displayResults(boolean resultsFound){
         if(resultsFound){
+            // Display results
             mResRecyclerView.setVisibility(View.VISIBLE);
+            mLoadingProgress.setVisibility(View.GONE);
+            mNoResultsTextView.setVisibility(View.GONE);
         }
         else{
-            mResRecyclerView.setVisibility(View.INVISIBLE);
+            // Display error message
+            mResRecyclerView.setVisibility(View.GONE);
+            mLoadingProgress.setVisibility(View.GONE);
+            mNoResultsTextView.setVisibility(View.VISIBLE);
         }
     }
 
